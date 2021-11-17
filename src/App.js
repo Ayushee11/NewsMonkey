@@ -1,24 +1,83 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+
+  Route,
+  Link
+} from "react-router-dom";
+
+import "./App.css";
+
+import About from "./components/About";
+import Alert from "./components/Alert";
+import Navbar from "./components/Navbar";
+import TextForm from "./components/TextForm";
 
 function App() {
+  const [mode, setMode] = useState("light"); //Whether dark mode is enabled or not
+  const [alert, setAlert] = useState(null);
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+  const toggleMode = () => {
+    if (mode === "light") {
+      setMode("dark");
+      document.body.style.backgroundColor = "grey";
+      showAlert("dark mode has been enabbled", "success");
+      document.title = "Dark Mode";
+      // setInterval(() => {
+      //   document.title='textutils is amazing'
+      // }, 2000);
+      // setInterval(() => {
+      //   document.title='textutils is wow amazing'
+      // }, 1500);
+    } else {
+      setMode("light");
+      document.body.style.backgroundColor = "white";
+      showAlert("light mode has been enabbled", "success");
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Router>
+      <Navbar
+        title="TextUtils"
+        aboutText="About TextUtils"
+        mode={mode}
+        toggleMode={toggleMode}
+      />
+      {/* <Navbar/> */}
+      <Alert alert={alert} />
+      <div className="container my-3">
+      <Routes>
+          <Route exact path="/about" element={ <About />}/>
+           
+         
+         
+          <Route exact path="/" element={ <TextForm
+          showAlert={showAlert}
+          heading="Enter the text to analyze below"
+          mode={mode}
+        />}/>
+         
+          
+        </Routes>
+       
+        
+      </div>
+      </Router>
+    </>
   );
 }
 
