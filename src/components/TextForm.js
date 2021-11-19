@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function TextForm(props) {
+  
   const [text, setText] = useState("");
   const handleUpClick = () => {
     //  console.log("Uppercase was clicked"+text)
@@ -41,23 +42,27 @@ export default function TextForm(props) {
             rows="8" style={{backgroundColor:props.mode==='dark'?'grey':'white', color:props.mode==='dark'?'white':'black'}}
           ></textarea>
         </div>
-        <button className="btn btn-primary  mx-1" onClick={handleUpClick}>
-          Convert to uppercase
-        </button>
-        <button className="btn btn-primary mx-1" onClick={handleLowerClick}>
-          Convert to LowerCase
-        </button>
-        <button className="btn btn-primary mx-1" onClick={handleClearClick}>
-         Clear Text
-        </button>
       </div>
       <div className="container my-3" style={{color:props.mode==='dark'?'white':'black'}}>
         <h2>Your Text Summary</h2>
         <p>
-          {text.split(" ").length} words and {text.length} characters
+          {text.split(" ").filter((element)=>{
+return element.length!==0
+          }).length} words and {text.length} characters
         </p>
-        <p>{0.008 * text.split(" ").length} Minutes read</p>
+        <p>{0.008 * text.split(" ").filter((element)=>{
+return element.length!==0
+          }).length} Minutes read</p>
         <h2>Preview</h2>
+        <button disabled={text.length===0} className="btn btn-primary  mx-1 my-1" onClick={handleUpClick}>
+          Convert to uppercase
+        </button>
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleLowerClick}>
+          Convert to LowerCase
+        </button>
+        <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleClearClick}>
+         Clear Text
+        </button>
         <p>{text}</p>
       </div>
     </>
