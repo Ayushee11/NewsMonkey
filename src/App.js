@@ -1,95 +1,43 @@
-import React from "react";
+import React, { useState } from 'react'
+import Navbar from './components/Navbar'
+import News from './components/News'
+// b0ffd8c9bd364509a51c8e29053d2e9a
+//import PropTypes from 'prop-types'
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
+import LoadingBar from 'react-top-loading-bar'
+const App=()=> {
 
-import { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
+ const pageSize=5
+ const apiKey="b0ffd8c9bd364509a51c8e29053d2e9a"
+const [progress, setProgress] = useState(0)
 
-  Route,
-  Link
-} from "react-router-dom";
 
-import "./App.css";
 
-import About from "./components/About";
-import Alert from "./components/Alert";
-import Navbar from "./components/Navbar";
-import TextForm from "./components/TextForm";
-
-function App() {
-  const [mode, setMode] = useState("light"); //Whether dark mode is enabled or not
-  const [alert, setAlert] = useState(null);
-
-  const showAlert = (message, type) => {
-    setAlert({
-      msg: message,
-      type: type,
-    });
-    setTimeout(() => {
-      setAlert(null);
-    }, 1500);
-  };
-
-const removeBodyClasses=()=>{
-  document.body.classList.remove('bg-light')
-  document.body.classList.remove('bg-danger')
-  document.body.classList.remove('bg-warning')
-  document.body.classList.remove('bg-dark')
-  document.body.classList.remove('bg-success')
-}
-
-  const toggleMode = (cls) => {
-    removeBodyClasses()
-    document.body.classList.add('bg-'+cls)
-    if (mode === "light") {
-      setMode("dark");
-      document.body.style.backgroundColor = "grey";
-      showAlert("dark mode has been enabbled", "success");
-      document.title = "Dark Mode";
-      // setInterval(() => {
-      //   document.title='textutils is amazing'
-      // }, 2000);
-      // setInterval(() => {
-      //   document.title='textutils is wow amazing'
-      // }, 1500);
-    } else {
-      setMode("light");
-      document.body.style.backgroundColor = "white";
-      showAlert("light mode has been enabbled", "success");
-    }
-  };
-
-  return (
-    <>
-    <Router>
-      <Navbar
-        title="TextUtils"
-        aboutText="About TextUtils"
-        mode={mode}
-        toggleMode={toggleMode}
-      />
-      {/* <Navbar/> */}
-      <Alert alert={alert} />
-      <div className="container my-3">
-      <Routes>
-          <Route exact path="/about" element={ <About mode={mode}/>}/>
-           
-         
-         
-          <Route exact path="/" element={ <TextForm
-          showAlert={showAlert}
-          heading="Enter the text to analyze below"
-          mode={mode}
-        />}/>
-         
-          
-        </Routes>
-       
+    
+    return (
+      <div>
+        <Router>
+        <Navbar/>
+        <LoadingBar
+        color='#f11946'
+        height={3}
+        progress={progress}
         
+      />
+        <Routes>
+          <Route exact path="/" element={<News setProgress={setProgress}  apiKey={apiKey} key="general" pageSize={pageSize} country="in" category="general"/>}/> 
+          <Route exact path="/business" element={ <News setProgress={setProgress} apiKey={apiKey}  key="business" pageSize={pageSize} country="in" category="business"/>}/>
+          <Route exact path="/entertainment" element={ <News setProgress={setProgress} apiKey={apiKey}  key="entertainment" pageSize={pageSize} country="in" category="entertainment"/>}/>
+          <Route exact path="/general" element={ <News setProgress={setProgress} apiKey={apiKey}  key="general" pageSize={pageSize} country="in" category="general"/>}/>
+          <Route exact path="/health" element={ <News setProgress={setProgress} apiKey={apiKey}  key="health" pageSize={pageSize} country="in" category="health"/>}/>
+          <Route exact path="/science"element={ <News setProgress={setProgress} apiKey={apiKey}  key="science" pageSize={pageSize} country="in" category="science"/>}/>
+          <Route exact path="/sports" element={ <News setProgress={setProgress} apiKey={apiKey}  key="sports" pageSize={pageSize} country="in" category="sports"/>}/>
+          <Route exact path="/technology" element={ <News setProgress={setProgress} apiKey={apiKey}  key="technology" pageSize={pageSize} country="in" category="technology"/>}/>
+          </Routes>
+        </Router>
       </div>
-      </Router>
-    </>
-  );
+    )
+  
 }
 
-export default App;
+export default App
